@@ -50,7 +50,7 @@ app.layout = html.Div(
                     html.P("Input stock code: "),
                     html.Div([
                         dcc.Input(id="dropdown_tickers", type="text"),
-                        html.Button("Submit", id='submit'),
+                        html.Button("", id='submit'),
                     ],
                              className="form")
                 ],
@@ -119,8 +119,9 @@ def update_data(n, val):  # inpur parameter(s)
             ticker = yf.Ticker(val)
             inf = ticker.info
             df = pd.DataFrame().from_dict(inf, orient="index").T
-            df[['logo_url', 'shortName', 'longBusinessSummary']]
-            return df['longBusinessSummary'].values[0], df['logo_url'].values[
+            df = df[['logo_url', 'shortName', 'longBusinessSummary']]
+
+        return df['longBusinessSummary'].values[0], df['logo_url'].values[
                 0], df['shortName'].values[0], None, None, None
 
 
@@ -181,9 +182,11 @@ def forecast(n, n_days, val):
         return [""]
     if val == None:
         raise PreventUpdate
+    if n==1:
+        return [""]
     fig = prediction(val, int(n_days) + 1)
     return [dcc.Graph(figure=fig)]
 
-
+# for running the app in development mode
 if __name__ == '__main__':
     app.run_server(debug=True)
